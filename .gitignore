@@ -22,3 +22,12 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# References
+references/
+
+# Cursor/Vscode/Agent
+.agents/
+.agent/
+.cursor/
+.vscode/
