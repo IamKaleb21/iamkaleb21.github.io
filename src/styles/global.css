@@ -1,0 +1,257 @@
+@import "tailwindcss";
+
+@theme {
+	--font-family-sans: 'Inter', sans-serif;
+	--font-family-mono: 'IBM Plex Mono', monospace;
+
+	--color-deep: #03050C;
+	--color-glass: rgba(255, 255, 255, 0.03);
+	--color-glass-border: rgba(255, 255, 255, 0.08);
+	--color-glow: #1e293b;
+	--color-accent: #8b5cf6;
+
+	--background-image-radial-glow: radial-gradient(circle at center, rgba(139, 92, 246, 0.25) 0%, rgba(3, 5, 12, 0) 70%);
+}
+
+/* Smooth scroll para anchor links */
+html {
+	scroll-behavior: smooth;
+	scroll-padding-top: 100px;
+	/* Offset para nav fixed */
+}
+
+/* Global styles */
+body {
+	background-color: #03050C;
+	background-image: radial-gradient(ellipse 120% 80% at 50% 0%,
+			rgba(139, 92, 246, 0.35) 0%,
+			rgba(139, 92, 246, 0.1) 40%,
+			rgba(3, 5, 12, 0) 70%);
+	background-attachment: fixed;
+	background-repeat: no-repeat;
+	background-size: 100% 100vh;
+	min-height: 100vh;
+	color: #94a3b8;
+	overflow-x: hidden;
+	font-family: 'Inter', sans-serif;
+}
+
+/* Selection */
+::selection {
+	background-color: #8b5cf6;
+	color: white;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: #03050C;
+}
+
+::-webkit-scrollbar-thumb {
+	background: #1e293b;
+	border-radius: 4px;
+}
+
+/* Skip link (accesibilidad) */
+.skip-link {
+	position: absolute;
+	top: -100px;
+	left: 0;
+	padding: 0.75rem 1rem;
+	background: var(--color-accent, #8b5cf6);
+	color: white;
+	z-index: 9999;
+	transition: top 0.2s;
+}
+
+.skip-link:focus {
+	top: 0;
+}
+
+/* Grid lines */
+.grid-line-x {
+	position: absolute;
+	left: 0;
+	right: 0;
+	height: 1px;
+	background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+}
+
+.grid-line-y {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 1px;
+	background: linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+}
+
+/* Glassmorphism utilities */
+.glass-panel {
+	background: rgba(255, 255, 255, 0.03);
+	-webkit-backdrop-filter: blur(10px);
+	backdrop-filter: blur(10px);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Firefox/Gecko: backdrop-filter es muy costoso; menos blur para mejor rendimiento */
+.browser-gecko .glass-panel {
+	-webkit-backdrop-filter: blur(4px);
+	backdrop-filter: blur(4px);
+}
+
+.glass-btn {
+	background: rgba(255, 255, 255, 0.08);
+	-webkit-backdrop-filter: blur(4px);
+	backdrop-filter: blur(4px);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	transition: all 0.3s ease;
+}
+
+.browser-gecko .glass-btn {
+	-webkit-backdrop-filter: blur(2px);
+	backdrop-filter: blur(2px);
+}
+
+.glass-btn:hover {
+	background: rgba(255, 255, 255, 0.15);
+	border-color: rgba(255, 255, 255, 0.3);
+	transform: translateY(-2px);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Tech Stack: todos los iconos iluminados (frosted glass + glow) */
+.tech-stack-icon {
+	position: relative;
+	overflow: hidden;
+	background: rgba(255, 255, 255, 0.08);
+	-webkit-backdrop-filter: blur(8px);
+	backdrop-filter: blur(8px);
+	border: 1px solid rgba(255, 255, 255, 0.15);
+	box-shadow:
+		0 0 0 1px rgba(255, 255, 255, 0.05),
+		0 0 20px rgba(139, 92, 246, 0.08);
+	transition: all 0.3s ease;
+}
+
+.browser-gecko .tech-stack-icon {
+	-webkit-backdrop-filter: blur(3px);
+	backdrop-filter: blur(3px);
+}
+
+.tech-stack-icon::after {
+	content: '';
+	position: absolute;
+	inset: -40% -60%;
+	background: linear-gradient(115deg,
+			transparent 35%,
+			rgba(255, 255, 255, 0.18) 45%,
+			rgba(255, 255, 255, 0.06) 55%,
+			transparent 65%);
+	transform: translateX(-30%) rotate(0.001deg);
+	opacity: 0;
+	transition: opacity 0.25s ease, transform 0.45s ease;
+	pointer-events: none;
+}
+
+.tech-stack-icon:hover {
+	background: rgba(255, 255, 255, 0.12);
+	border-color: rgba(255, 255, 255, 0.25);
+	box-shadow:
+		0 0 0 1px rgba(255, 255, 255, 0.1),
+		0 0 24px rgba(139, 92, 246, 0.15);
+	transform: translateY(-2px);
+}
+
+.tech-stack-icon:hover::after {
+	opacity: 1;
+	transform: translateX(30%) rotate(0.001deg);
+}
+
+/* Hide scrollbars (used for horizontal tech carousels) */
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+
+.no-scrollbar {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+/* Projects thumbnails: wireframe placeholder */
+.project-thumb {
+	position: relative;
+	overflow: hidden;
+	background:
+		linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+		radial-gradient(circle at 30% 30%, rgba(139, 92, 246, 0.12) 0%, transparent 55%);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.project-thumb::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background:
+		linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px),
+		linear-gradient(180deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+	background-size: 34px 34px;
+	opacity: 0.35;
+	pointer-events: none;
+}
+
+.project-thumb::after {
+	content: '';
+	position: absolute;
+	inset: -40% -60%;
+	background: linear-gradient(115deg,
+			transparent 35%,
+			rgba(255, 255, 255, 0.16) 45%,
+			rgba(255, 255, 255, 0.05) 55%,
+			transparent 65%);
+	transform: translateX(-30%) rotate(0.001deg);
+	opacity: 0;
+	transition: opacity 0.25s ease, transform 0.55s ease;
+	pointer-events: none;
+}
+
+.group:hover .project-thumb::after {
+	opacity: 1;
+	transform: translateX(30%) rotate(0.001deg);
+}
+
+/* Projects thumbnails with images: hide placeholder styles */
+.project-thumb.has-image {
+	background: #000;
+	border: none;
+}
+
+.project-thumb.has-image::before {
+	display: none;
+}
+
+.project-thumb.has-image img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: center;
+}
+
+/* Input styles */
+.minimal-input {
+	background: transparent;
+	border: none;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	color: white;
+	padding: 10px 0;
+	width: 100%;
+	outline: none;
+	transition: border-color 0.3s;
+}
+
+.minimal-input:focus {
+	border-bottom-color: #8b5cf6;
+}
