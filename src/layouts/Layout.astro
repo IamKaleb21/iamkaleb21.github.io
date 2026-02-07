@@ -1,23 +1,68 @@
+---
+import '../styles/global.css';
+import { siteData } from '../data/site';
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const { 
+	title = siteData.defaultTitle, 
+	description = siteData.defaultDescription 
+} = Astro.props;
+
+const siteUrl = import.meta.env.SITE ?? 'https://iamkaleb21.github.io';
+const canonicalUrl = `${siteUrl.replace(/\/$/, '')}/`;
+const ogImage = `${canonicalUrl}favicon.svg`;
+---
+
 <!doctype html>
-<html lang="en">
+<html lang="es" id="html-root">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<link rel="sitemap" href="/sitemap-index.xml" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="description" content={description} />
+		<meta name="keywords" content="desarrollador full stack, react developer, nextjs, nodejs, express, tailwind css, ingeniero informatico, peru, desarrollador javascript" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+
+		<!-- Open Graph -->
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:type" content="website" />
+		<meta property="og:locale" content="es_ES" />
+		<meta property="og:image" content={ogImage} />
+
+		<!-- Twitter Card -->
+		<meta name="twitter:card" content="summary" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
+		
+		<!-- Google Fonts: Inter -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@700&display=swap" rel="stylesheet">
+		
+		<title>{title}</title>
 	</head>
 	<body>
+		<a href="#main" class="skip-link">
+			Saltar al contenido principal
+		</a>
 		<slot />
+		<script is:inline>
+			// Marcar Gecko (Firefox, Zen, etc.) para reducir efectos costosos y mejorar rendimiento
+			(function () {
+				var ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+				if (/Gecko\//i.test(ua) && !/Chromium|Chrome\//i.test(ua)) {
+					document.documentElement.classList.add('browser-gecko');
+				}
+			})();
+		</script>
 	</body>
 </html>
-
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
