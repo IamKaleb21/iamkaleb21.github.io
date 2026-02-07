@@ -1,11 +1,67 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import ExpertiseNodes from '../components/ExpertiseNodes.astro';
+import About from '../components/About.astro';
+import TechStack from '../components/TechStack.astro';
+import CentralViz from '../components/CentralViz.astro';
+import Experience from '../components/Experience.astro';
+import Studies from '../components/Studies.astro';
+import Projects from '../components/Projects.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import PortfolioAnimations from '../components/PortfolioAnimations.astro';
+import { siteData } from '../data/site';
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Portafolio de Aarón Kaleb Arteaga Rodríguez" description={siteData.tagline}>
+	<!-- Navigation -->
+	<Nav githubUrl={siteData.githubUrl} />
+
+	<!-- Main Container -->
+	<main id="main" class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 mt-10">
+		<Hero 
+			name={siteData.name}
+			tagline={siteData.tagline}
+			socialLinks={siteData.socialLinks}
+		/>
+
+		<ExpertiseNodes />
+
+		<div id="about">
+			<About />
+		</div>
+
+		<div id="experience">
+			<Experience />
+		</div>
+
+		<div id="projects">
+			<Projects />
+		</div>
+
+		<div id="tech-stack">
+			<TechStack />
+		</div>
+
+		<CentralViz role={siteData.role} learning={siteData.learning} />
+
+		<div id="studies">
+			<Studies />
+		</div>
+
+		<div id="contact">
+			<Contact email={typeof siteData.socialLinks.email === 'string' ? siteData.socialLinks.email.replace('mailto:', '') : 'hello@example.com'} />
+		</div>
+
+		<Footer 
+			githubUrl={siteData.githubUrl}
+			linkedinUrl={siteData.socialLinks.linkedin}
+			email={siteData.socialLinks.email}
+		/>
+	</main>
+
+	<!-- GSAP Animations -->
+	<PortfolioAnimations />
 </Layout>
