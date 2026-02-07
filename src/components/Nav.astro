@@ -1,0 +1,94 @@
+---
+import { Icon } from 'astro-icon/components';
+import { siteData } from '../data/site';
+
+const navLinks = [
+	{ href: "#about", label: "Sobre mí" },
+	{ href: "#experience", label: "Experiencia" },
+	{ href: "#projects", label: "Proyectos" },
+	{ href: "#tech-stack", label: "Tecnologías" },
+	{ href: "#studies", label: "Formación" },
+	{ href: "#contact", label: "Contacto" }
+];
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-black/40 border-b border-white/5 transition-all nav-bar" aria-label="Navegación principal">
+	<div class="flex justify-between items-center px-6 sm:px-8 py-4 max-w-7xl mx-auto">
+		<a href="#" class="text-white text-2xl font-bold opacity-80 hover:opacity-100 transition-opacity nav-fade" aria-label="Home">
+			<Icon name="mdi:code" class="w-8 h-8" />
+		</a>
+
+		<!-- Mobile: single changing tag (scrollspy-driven) -->
+		<div class="md:hidden flex-1 flex justify-center px-4">
+			<a
+				href={navLinks[0].href}
+				class="nav-current-tag px-4 py-2 rounded-full text-sm text-white/90 border border-white/10 bg-white/5 backdrop-blur-md"
+				data-nav-current
+				aria-label="Current section"
+			>
+				{navLinks[0].label}
+			</a>
+		</div>
+
+		<div class="hidden md:flex items-center gap-1 nav-links-container">
+			{navLinks.map((link) => (
+				<a 
+					href={link.href}
+					class="nav-link px-3 py-2 rounded-lg text-sm text-gray-400 hover:text-white transition-all duration-300"
+					data-nav-link={link.href.replace('#', '')}
+				>
+					{link.label}
+				</a>
+			))}
+		</div>
+
+		<button 
+			disabled
+			class="glass-btn px-6 py-2 rounded-full text-sm text-white/50 font-medium cursor-not-allowed nav-fade flex items-center gap-2"
+			title="Próximamente"
+		>
+			<Icon name="mdi:notebook-outline" class="w-4 h-4" />
+			Blog
+		</button>
+	</div>
+</nav>
+
+<style is:global>
+	.nav-links-container {
+		transform-origin: center;
+		background: rgba(255, 255, 255, 0.04);
+		border: 1px solid rgba(255, 255, 255, 0.07);
+		border-radius: 9999px;
+		padding: 0.25rem;
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+	}
+
+	.nav-link {
+		position: relative;
+		background: transparent;
+		border: 1px solid transparent;
+	}
+
+	.nav-link:hover {
+		color: rgba(255, 255, 255, 0.95);
+	}
+
+	.nav-link.nav-link-active {
+		color: white;
+		text-shadow: 0 0 14px rgba(139, 92, 246, 0.35);
+	}
+
+	.nav-link.nav-link-active::before {
+		content: '';
+		position: absolute;
+		left: 10px;
+		right: 10px;
+		bottom: 6px;
+		height: 2px;
+		border-radius: 9999px;
+		background: rgba(139, 92, 246, 0.9);
+		box-shadow: 0 0 14px rgba(139, 92, 246, 0.35);
+		pointer-events: none;
+	}
+</style>

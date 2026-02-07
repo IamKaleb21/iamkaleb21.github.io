@@ -1,0 +1,276 @@
+---
+// Este componente se encarga de las animaciones GSAP
+---
+
+<script>
+	import gsap from 'gsap';
+	import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+	// Registrar ScrollTrigger
+	gsap.registerPlugin(ScrollTrigger);
+
+	// Esperar a que el DOM esté listo
+	document.addEventListener('DOMContentLoaded', () => {
+		// Hero animations
+		const heroTitle = document.querySelector('[data-hero-title]');
+		const heroSubtitle = document.querySelector('[data-hero-subtitle]');
+		const heroIcons = document.querySelector('[data-hero-icons]');
+
+		if (heroTitle) {
+			gsap.from(heroTitle, {
+				opacity: 0,
+				y: 30,
+				duration: 0.8,
+				ease: 'power2.out'
+			});
+		}
+
+		if (heroSubtitle) {
+			gsap.from(heroSubtitle, {
+				opacity: 0,
+				y: 20,
+				duration: 0.8,
+				delay: 0.2,
+				ease: 'power2.out'
+			});
+		}
+
+		if (heroIcons) {
+			gsap.from(heroIcons.children, {
+				opacity: 0,
+				y: 20,
+				duration: 0.5,
+				delay: 0.4,
+				stagger: 0.1,
+				ease: 'power2.out'
+			});
+		}
+
+		// Laptop 3D model animation
+		const heroLaptop = document.querySelector('[data-hero-laptop]');
+		if (heroLaptop) {
+			gsap.from(heroLaptop, {
+				opacity: 0,
+				y: 40,
+				scale: 0.9,
+				duration: 1,
+				delay: 0.3,
+				ease: 'power2.out'
+			});
+		}
+
+		// Animate sections on scroll
+		const sections = document.querySelectorAll('[data-animate="section"]');
+		sections.forEach((section) => {
+			gsap.from(section, {
+				opacity: 0,
+				y: 50,
+				duration: 0.55,
+				ease: 'power3.out',
+				scrollTrigger: {
+					trigger: section,
+					start: 'top 90%',
+					end: 'bottom 15%',
+					toggleActions: 'play reverse play reverse'
+				}
+			});
+		});
+
+		// Animate expertise nodes
+		const expertiseNodes = document.querySelectorAll('[data-expertise-node]');
+		if (expertiseNodes.length > 0) {
+			gsap.from(expertiseNodes, {
+				opacity: 0,
+				y: 30,
+				duration: 0.45,
+				stagger: 0.1,
+				ease: 'power3.out',
+				scrollTrigger: {
+					trigger: expertiseNodes[0],
+					start: 'top 90%',
+					end: 'bottom 15%',
+					toggleActions: 'play reverse play reverse'
+				}
+			});
+		}
+
+		// Experience timeline: cada ítem aparece al hacer scroll (como en la referencia)
+		const experienceItems = document.querySelectorAll('[data-experience-item]');
+		experienceItems.forEach((item) => {
+			const side = item.getAttribute('data-experience-side');
+			const isMobile = item.hasAttribute('data-experience-mobile');
+			const fromX = isMobile ? 0 : (side === 'left' ? -40 : 40);
+			gsap.from(item, {
+				opacity: 0,
+				x: fromX,
+				y: isMobile ? 30 : 0,
+				duration: 0.5,
+				ease: 'power3.out',
+				scrollTrigger: {
+					trigger: item,
+					start: 'top 92%',
+					end: 'bottom 12%',
+					toggleActions: 'play reverse play reverse'
+				}
+			});
+		});
+
+		// Animate tech stack: el grid entero entra de una vez (todos los iconos iluminados igual)
+		const techGrid = document.querySelector('[data-tech-grid]');
+		if (techGrid) {
+			gsap.from(techGrid, {
+				opacity: 0,
+				y: 30,
+				duration: 0.5,
+				ease: 'power3.out',
+				scrollTrigger: {
+					trigger: techGrid,
+					start: 'top 90%',
+					end: 'bottom 12%',
+					toggleActions: 'play reverse play reverse'
+				}
+			});
+		}
+
+		// Active nav link según la sección visible al hacer scroll (con offset para nav fixed)
+		const sectionIds = ['about', 'experience', 'projects', 'tech-stack', 'studies', 'contact'];
+		const navLinks = document.querySelectorAll('.nav-link[data-nav-link]');
+		const navCurrent = document.querySelector('[data-nav-current]');
+		const navHeight = 80; // Altura aproximada del nav fixed
+
+		function setActiveNavLink() {
+			const scrollPosition = window.scrollY + navHeight + 100; // Offset para considerar el nav
+			let activeId = null;
+			let minDistance = Infinity;
+
+			// Encontrar la sección más cercana al punto de scroll
+			for (const id of sectionIds) {
+				const el = document.getElementById(id);
+				if (!el) continue;
+				const rect = el.getBoundingClientRect();
+				const sectionTop = rect.top + window.scrollY;
+				const sectionBottom = sectionTop + rect.height;
+
+				// Si el scroll está dentro de la sección
+				if (scrollPosition >= sectionTop && scrollPosition <= sectionBottom) {
+					activeId = id;
+					break;
+				}
+
+				// Calcular distancia al inicio de la sección
+				const distance = Math.abs(sectionTop - scrollPosition);
+				if (distance < minDistance && scrollPosition < sectionBottom) {
+					minDistance = distance;
+					activeId = id;
+				}
+			}
+
+			// Fallback: si estamos antes de la primera sección, fijar la primera
+			if (!activeId) activeId = sectionIds[0];
+
+			navLinks.forEach((link) => {
+				const id = link.getAttribute('data-nav-link');
+				const isActive = id === activeId;
+				link.classList.toggle('nav-link-active', isActive);
+				if (isActive) {
+					link.setAttribute('aria-current', 'page');
+				} else {
+					link.removeAttribute('aria-current');
+				}
+			});
+
+			// Mobile: actualizar etiqueta única con el label/href de la sección activa
+			if (navCurrent) {
+				const activeLink = document.querySelector(`.nav-link[data-nav-link="${activeId}"]`);
+				const label = activeLink?.textContent?.trim();
+				if (label) navCurrent.textContent = label;
+				(navCurrent as HTMLAnchorElement).setAttribute('href', `#${activeId}`);
+			}
+		}
+
+		// Smooth scroll con offset para anchor links
+		document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+			anchor.addEventListener('click', function (e) {
+				const href = (e.currentTarget as HTMLAnchorElement).getAttribute('href');
+				if (!href) return;
+				if (href === '#') {
+					e.preventDefault();
+					window.scrollTo({ top: 0, behavior: 'smooth' });
+					return;
+				}
+				const targetId = href.substring(1);
+				const targetElement = document.getElementById(targetId);
+				if (targetElement) {
+					e.preventDefault();
+					const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - navHeight - 20;
+					window.scrollTo({
+						top: targetPosition,
+						behavior: 'smooth'
+					});
+				}
+			});
+		});
+
+		window.addEventListener('scroll', setActiveNavLink);
+		setActiveNavLink();
+
+	// Navbar: se desvanece (incluye logo + GitHub). Solo las etiquetas se "mueven".
+	// Ajustado para sentirse más instantáneo (duraciones menores + overwrite + rAF throttle).
+	const navbar = document.querySelector('.nav-bar');
+	const navFadeEls = document.querySelectorAll('.nav-fade');
+	const navLinksContainer = document.querySelector('.nav-links-container');
+
+	if (navbar) {
+		let ticking = false;
+
+		function applyNavParallax() {
+			const currentScrollY = window.scrollY;
+			const scrollThreshold = 80;
+			const isScrolled = currentScrollY > scrollThreshold;
+
+			// Navbar fondo/blur/borde
+			gsap.to(navbar, {
+				backgroundColor: isScrolled ? 'rgba(0, 0, 0, 0)' : 'rgba(0, 0, 0, 0.4)',
+				borderBottomColor: isScrolled ? 'rgba(255, 255, 255, 0)' : 'rgba(255, 255, 255, 0.05)',
+				backdropFilter: isScrolled ? 'blur(0px)' : 'blur(12px)',
+				duration: 0.12,
+				ease: 'none',
+				overwrite: 'auto'
+			});
+
+			// Logo + GitHub (fade)
+			navFadeEls.forEach((el) => {
+				gsap.to(el, {
+					opacity: isScrolled ? 0 : 1,
+					duration: 0.1,
+					ease: 'none',
+					overwrite: 'auto'
+				});
+			});
+
+			// Etiquetas: visibles siempre, pero son lo único que se mueve
+			if (navLinksContainer) {
+				gsap.to(navLinksContainer, {
+					y: isScrolled ? 10 : 0,
+					opacity: 1,
+					duration: 0.12,
+					ease: 'none',
+					overwrite: 'auto'
+				});
+			}
+		}
+
+		function onScroll() {
+			if (ticking) return;
+			ticking = true;
+			requestAnimationFrame(() => {
+				applyNavParallax();
+				ticking = false;
+			});
+		}
+
+		window.addEventListener('scroll', onScroll, { passive: true });
+		applyNavParallax(); // Estado inicial
+	}
+	});
+</script>
