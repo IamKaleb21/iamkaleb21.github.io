@@ -20,9 +20,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Install, build, and upload your site
         uses: withastro/action@v2
-        # with:
-          # path: . # Descomenta esto si tu proyecto Astro no está en la raíz
-          # package-manager: pnpm # Descomenta si usas pnpm o yarn en lugar de npm
+        with:
+          package-manager: pnpm
 
   deploy:
     needs: build
