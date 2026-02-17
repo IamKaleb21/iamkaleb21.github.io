@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { Icon } from 'astro-icon/components';
+import SectionHeader from './SectionHeader.astro';
 import { projects as defaultProjects, type Project } from '../data/projects';
 
 interface Props {
@@ -11,11 +12,7 @@ const { projects = defaultProjects } = Astro.props;
 ---
 
 <section class="mb-32" data-animate="section">
-	<div class="flex items-center justify-center mb-16">
-		<div class="h-px w-12 bg-gray-800 mr-4"></div>
-		<h2 class="text-xs uppercase tracking-widest text-gray-500">Proyectos</h2>
-		<div class="h-px w-12 bg-gray-800 ml-4"></div>
-	</div>
+	<SectionHeader title="Proyectos" />
 
 	{/* Mosaico: 1 destacada + secundarias (rompe simetría y se ve menos plantilla) */}
 	<div class="grid grid-cols-1 md:grid-cols-6 gap-6">

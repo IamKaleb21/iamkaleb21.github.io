@@ -1,13 +1,10 @@
 ---
 import { studies } from '../data/studies';
+import SectionHeader from './SectionHeader.astro';
 ---
 
 <section class="mb-32" data-animate="section">
-	<div class="flex items-center justify-center mb-16">
-		<div class="h-[1px] w-12 bg-gray-800 mr-4"></div>
-		<h2 class="text-xs uppercase tracking-widest text-gray-500">Formación y certificaciones</h2>
-		<div class="h-[1px] w-12 bg-gray-800 ml-4"></div>
-	</div>
+	<SectionHeader title="Estudios" />
 
 	<div class="max-w-4xl mx-auto space-y-6">
 		{studies.map((study) => (
