@@ -13,31 +13,33 @@ const isGecko =
   !('chrome' in window) &&
   /Gecko\//i.test(navigator.userAgent);
 
-const VisibilityContext = createContext({ isHeroVisible: true });
+const VisibilityContext = createContext({ isHeroVisible: true, isMobile: false });
 
 /**
- * frameloop="demand": solo dibujamos cuando el Hero está visible (C).
- * En Gecko limitamos a ~30fps (B) para dar margen al scroll.
+ * frameloop="demand": solo dibujamos cuando el Hero está visible.
+ * En móvil/Gecko limitamos fps para reducir lag al entrar al hero.
  */
 function DemandLoopDriver() {
-  const { isHeroVisible } = useContext(VisibilityContext);
+  const { isHeroVisible, isMobile } = useContext(VisibilityContext);
   const { invalidate } = useThree();
   const lastInvoke = useRef(0);
-  const FPS_Gecko = 60;
+  const fpsLimit = isMobile ? 30 : isGecko ? 60 : undefined;
 
   useEffect(() => {
     let raf: number;
     const loop = () => {
       raf = requestAnimationFrame(loop);
       if (!isHeroVisible) return;
-      const now = performance.now();
-      if (isGecko && now - lastInvoke.current < 1000 / FPS_Gecko) return;
-      lastInvoke.current = now;
+      if (fpsLimit != null) {
+        const now = performance.now();
+        if (now - lastInvoke.current < 1000 / fpsLimit) return;
+        lastInvoke.current = now;
+      }
       invalidate();
     };
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, [isHeroVisible, invalidate]);
+  }, [isHeroVisible, invalidate, fpsLimit]);
 
   return null;
 }
@@ -142,13 +144,18 @@ function Laptop({
   );
 }
 
+function getIsMobile() {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`).matches;
+}
+
 export default function LaptopModel() {
   const [laptopMeshes, setLaptopMeshes] = useState<THREE.Mesh[]>([]);
   const [isHeroVisible, setIsHeroVisible] = useState(true);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(getIsMobile);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Ajustar escala/posición en móvil para que el modelo quepa entero
+  // Ajustar escala/posición en móvil y escuchar cambios de viewport
   useEffect(() => {
     const mq = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT}px)`);
     setIsMobile(mq.matches);
@@ -169,8 +176,20 @@ export default function LaptopModel() {
     return () => io.disconnect();
   }, []);
 
+  // En móvil no montar el modelo 3D (mejor performance)
+  if (isMobile) {
+    return (
+      <div
+        ref={containerRef}
+        className="laptop-container"
+        style={{ width: '100%', height: '100%', minHeight: '400px' }}
+        aria-hidden="true"
+      />
+    );
+  }
+
   return (
-    <VisibilityContext.Provider value={{ isHeroVisible }}>
+    <VisibilityContext.Provider value={{ isHeroVisible, isMobile }}>
       <div
         ref={containerRef}
         className="laptop-container"
@@ -178,10 +197,10 @@ export default function LaptopModel() {
       >
         <Canvas
           style={{ background: 'transparent' }}
-          dpr={isGecko ? 1 : [1, 2]}
+          dpr={isMobile || isGecko ? 1 : [1, 2]}
           frameloop="demand"
           gl={{
-            antialias: !isGecko,
+            antialias: !isGecko && !isMobile,
             alpha: true,
             powerPreference: 'high-performance',
             toneMapping: THREE.ACESFilmicToneMapping,
@@ -233,8 +252,28 @@ export default function LaptopModel() {
           dampingFactor={0.05}
         />
         
-        {/* Post-processing: en Gecko (Firefox/Zen) es muy costoso; usamos solo Bloom suave o nada */}
-        {!isGecko && (
+        {/* Post-processing: móvil/Gecko = solo Bloom ligero para reducir lag al entrar al hero */}
+        {isMobile && (
+          <EffectComposer>
+            <Bloom
+              luminanceThreshold={0.5}
+              luminanceSmoothing={0.9}
+              intensity={1}
+              radius={0.4}
+            />
+          </EffectComposer>
+        )}
+        {!isMobile && isGecko && (
+          <EffectComposer>
+            <Bloom
+              luminanceThreshold={0.4}
+              luminanceSmoothing={0.9}
+              intensity={1}
+              radius={0.4}
+            />
+          </EffectComposer>
+        )}
+        {!isMobile && !isGecko && (
           <EffectComposer>
             <Outline
               selection={laptopMeshes}
@@ -251,16 +290,6 @@ export default function LaptopModel() {
               luminanceSmoothing={0.9}
               intensity={1.8}
               radius={0.9}
-            />
-          </EffectComposer>
-        )}
-        {isGecko && (
-          <EffectComposer>
-            <Bloom
-              luminanceThreshold={0.4}
-              luminanceSmoothing={0.9}
-              intensity={1}
-              radius={0.4}
             />
           </EffectComposer>
         )}

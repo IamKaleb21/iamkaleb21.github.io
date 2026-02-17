@@ -59,115 +59,94 @@
 			});
 		}
 
-		// Animate sections on scroll
-		const sections = document.querySelectorAll('[data-animate="section"]');
-		sections.forEach((section) => {
-			gsap.from(section, {
-				opacity: 0,
-				y: 50,
-				duration: 0.55,
-				ease: 'power3.out',
-				scrollTrigger: {
-					trigger: section,
-					start: 'top 90%',
-					end: 'bottom 15%',
-					toggleActions: 'play reverse play reverse'
-				}
-			});
-		});
+		// ScrollTrigger solo en desktop; en móvil no se registran (solución D: máxima fluidez)
+		const isMobileViewport = window.matchMedia('(max-width: 768px)').matches;
 
-		// Animate expertise nodes
-		const expertiseNodes = document.querySelectorAll('[data-expertise-node]');
-		if (expertiseNodes.length > 0) {
-			gsap.from(expertiseNodes, {
-				opacity: 0,
-				y: 30,
-				duration: 0.45,
-				stagger: 0.1,
-				ease: 'power3.out',
-				scrollTrigger: {
-					trigger: expertiseNodes[0],
-					start: 'top 90%',
-					end: 'bottom 15%',
-					toggleActions: 'play reverse play reverse'
-				}
+		if (!isMobileViewport) {
+			// Animate sections on scroll
+			const sections = document.querySelectorAll('[data-animate="section"]');
+			sections.forEach((section) => {
+				gsap.from(section, {
+					opacity: 0,
+					y: 50,
+					duration: 0.55,
+					ease: 'power3.out',
+					scrollTrigger: {
+						trigger: section,
+						start: 'top 90%',
+						end: 'bottom 15%',
+						toggleActions: 'play reverse play reverse'
+					}
+				});
 			});
+
+			// Animate expertise nodes
+			const expertiseNodes = document.querySelectorAll('[data-expertise-node]');
+			if (expertiseNodes.length > 0) {
+				gsap.from(expertiseNodes, {
+					opacity: 0,
+					y: 30,
+					duration: 0.45,
+					stagger: 0.1,
+					ease: 'power3.out',
+					scrollTrigger: {
+						trigger: expertiseNodes[0],
+						start: 'top 90%',
+						end: 'bottom 15%',
+						toggleActions: 'play reverse play reverse'
+					}
+				});
+			}
+
+			// Experience timeline: cada ítem aparece al hacer scroll (como en la referencia)
+			const experienceItems = document.querySelectorAll('[data-experience-item]');
+			experienceItems.forEach((item) => {
+				const side = item.getAttribute('data-experience-side');
+				const isMobileItem = item.hasAttribute('data-experience-mobile');
+				const fromX = isMobileItem ? 0 : (side === 'left' ? -40 : 40);
+				gsap.from(item, {
+					opacity: 0,
+					x: fromX,
+					y: isMobileItem ? 30 : 0,
+					duration: 0.5,
+					ease: 'power3.out',
+					scrollTrigger: {
+						trigger: item,
+						start: 'top 92%',
+						end: 'bottom 12%',
+						toggleActions: 'play reverse play reverse'
+					}
+				});
+			});
+
+			// Animate tech stack: el grid entero entra de una vez (todos los iconos iluminados igual)
+			const techGrid = document.querySelector('[data-tech-grid]');
+			if (techGrid) {
+				gsap.from(techGrid, {
+					opacity: 0,
+					y: 30,
+					duration: 0.5,
+					ease: 'power3.out',
+					scrollTrigger: {
+						trigger: techGrid,
+						start: 'top 90%',
+						end: 'bottom 12%',
+						toggleActions: 'play reverse play reverse'
+					}
+				});
+			}
 		}
 
-		// Experience timeline: cada ítem aparece al hacer scroll (como en la referencia)
-		const experienceItems = document.querySelectorAll('[data-experience-item]');
-		experienceItems.forEach((item) => {
-			const side = item.getAttribute('data-experience-side');
-			const isMobile = item.hasAttribute('data-experience-mobile');
-			const fromX = isMobile ? 0 : (side === 'left' ? -40 : 40);
-			gsap.from(item, {
-				opacity: 0,
-				x: fromX,
-				y: isMobile ? 30 : 0,
-				duration: 0.5,
-				ease: 'power3.out',
-				scrollTrigger: {
-					trigger: item,
-					start: 'top 92%',
-					end: 'bottom 12%',
-					toggleActions: 'play reverse play reverse'
-				}
-			});
-		});
-
-		// Animate tech stack: el grid entero entra de una vez (todos los iconos iluminados igual)
-		const techGrid = document.querySelector('[data-tech-grid]');
-		if (techGrid) {
-			gsap.from(techGrid, {
-				opacity: 0,
-				y: 30,
-				duration: 0.5,
-				ease: 'power3.out',
-				scrollTrigger: {
-					trigger: techGrid,
-					start: 'top 90%',
-					end: 'bottom 12%',
-					toggleActions: 'play reverse play reverse'
-				}
-			});
-		}
-
-		// Active nav link según la sección visible al hacer scroll (con offset para nav fixed)
+		// Scrollspy con IntersectionObserver (sin scroll listener → sin layout thrashing)
 		const sectionIds = ['about', 'experience', 'projects', 'tech-stack', 'studies', 'contact'];
 		const navLinks = document.querySelectorAll('.nav-link[data-nav-link]');
 		const navCurrent = document.querySelector('[data-nav-current]');
 		const navHeight = 80; // Altura aproximada del nav fixed
 
-		function setActiveNavLink() {
-			const scrollPosition = window.scrollY + navHeight + 100; // Offset para considerar el nav
-			let activeId = null;
-			let minDistance = Infinity;
+		const sectionState = new Map<string, { isIntersecting: boolean; ratio: number }>();
+		sectionIds.forEach((id) => sectionState.set(id, { isIntersecting: false, ratio: 0 }));
 
-			// Encontrar la sección más cercana al punto de scroll
-			for (const id of sectionIds) {
-				const el = document.getElementById(id);
-				if (!el) continue;
-				const rect = el.getBoundingClientRect();
-				const sectionTop = rect.top + window.scrollY;
-				const sectionBottom = sectionTop + rect.height;
-
-				// Si el scroll está dentro de la sección
-				if (scrollPosition >= sectionTop && scrollPosition <= sectionBottom) {
-					activeId = id;
-					break;
-				}
-
-				// Calcular distancia al inicio de la sección
-				const distance = Math.abs(sectionTop - scrollPosition);
-				if (distance < minDistance && scrollPosition < sectionBottom) {
-					minDistance = distance;
-					activeId = id;
-				}
-			}
-
-			// Fallback: si estamos antes de la primera sección, fijar la primera
-			if (!activeId) activeId = sectionIds[0];
-
+		function applyActiveToNav(activeId: string) {
 			navLinks.forEach((link) => {
 				const id = link.getAttribute('data-nav-link');
 				const isActive = id === activeId;
@@ -178,8 +157,6 @@
 					link.removeAttribute('aria-current');
 				}
 			});
-
-			// Mobile: actualizar etiqueta única con el label/href de la sección activa
 			if (navCurrent) {
 				const activeLink = document.querySelector(`.nav-link[data-nav-link="${activeId}"]`);
 				const label = activeLink?.textContent?.trim();
@@ -187,6 +164,46 @@
 				(navCurrent as HTMLAnchorElement).setAttribute('href', `#${activeId}`);
 			}
 		}
+
+		let lastActiveId: string | null = null;
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					const id = entry.target.id;
+					if (!sectionIds.includes(id)) return;
+					sectionState.set(id, {
+						isIntersecting: entry.isIntersecting,
+						ratio: entry.intersectionRatio
+					});
+				});
+				// Sección activa: la que más intersecta la zona (nav excluido, mitad superior del viewport)
+				let activeId = sectionIds[0];
+				let maxRatio = 0;
+				for (const id of sectionIds) {
+					const s = sectionState.get(id)!;
+					if (s.isIntersecting && s.ratio > maxRatio) {
+						maxRatio = s.ratio;
+						activeId = id;
+					}
+				}
+				// Solo actualizar el nav cuando cambie la sección activa (menos DOM writes → menos lag)
+				if (activeId !== lastActiveId) {
+					lastActiveId = activeId;
+					applyActiveToNav(activeId);
+				}
+			},
+			{
+				root: null,
+				rootMargin: `-${navHeight}px 0px -50% 0px`,
+				threshold: [0, 0.25, 0.5, 0.75, 1]
+			}
+		);
+
+		sectionIds.forEach((id) => {
+			const el = document.getElementById(id);
+			if (el) observer.observe(el);
+		});
+		applyActiveToNav(sectionIds[0]); // Estado inicial
 
 		// Smooth scroll con offset para anchor links
 		document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
@@ -211,16 +228,12 @@
 			});
 		});
 
-		window.addEventListener('scroll', setActiveNavLink);
-		setActiveNavLink();
-
-	// Navbar: se desvanece (incluye logo + GitHub). Solo las etiquetas se "mueven".
-	// Ajustado para sentirse más instantáneo (duraciones menores + overwrite + rAF throttle).
+	// Navbar: se desvanece (incluye logo + GitHub). Solo en desktop; en móvil no animar en scroll (evita backdrop-filter costoso).
 	const navbar = document.querySelector('.nav-bar');
 	const navFadeEls = document.querySelectorAll('.nav-fade');
 	const navLinksContainer = document.querySelector('.nav-links-container');
 
-	if (navbar) {
+	if (navbar && !isMobileViewport) {
 		let ticking = false;
 
 		function applyNavParallax() {
