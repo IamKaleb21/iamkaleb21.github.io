@@ -1,0 +1,30 @@
+TASK 3: Create TimelineItem.astro Component - COMPLETED ✓
+
+FILE CREATED:
+✓ src/components/TimelineItem.astro (1982 bytes)
+
+REQUIREMENTS MET:
+✓ Imports: type Experience from '../data/experience'
+✓ Imports: ExperienceCard component
+✓ Props Interface:
+  - experience: Experience (typed)
+  - isLeft: boolean (typed)
+  - isMobile: boolean (typed)
+✓ Renders left/right layout based on isLeft
+✓ Horizontal connectors (h-0.5 purple-500/60 lines)
+✓ Mobile variant with simplified timeline
+✓ Excludes center node (intentional - stays in Experience.astro)
+✓ Preserves exact grid and Tailwind classes from original
+
+VERIFICATION:
+✓ pnpm astro check: PASSED (no new errors in TimelineItem.astro)
+✓ TypeScript: PASSED (no type errors from component)
+✓ Evidence saved:
+  - .sisyphus/evidence/task-3-types.txt
+  - .sisyphus/evidence/task-3-astro-check.txt
+
+NOTES:
+- 3 pre-existing errors in LaptopModel.tsx (Three.js types) - NOT introduced by this task
+- Component is ready for integration into Experience.astro refactoring
+- Mobile layout handling via isMobile prop
+- Desktop layout with alternating left/right positioning

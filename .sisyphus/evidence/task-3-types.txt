@@ -1,0 +1,4 @@
+src/components/LaptopModel.tsx(6,24): error TS7016: Could not find a declaration file for module 'three'. '/home/imkaleb21/dev/iamkaleb21.github.io/node_modules/.pnpm/three@0.182.0/node_modules/three/build/three.module.js' implicitly has an 'any' type.
+  If the 'three' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/three'
+src/components/LaptopModel.tsx(112,35): error TS7006: Parameter 'child' implicitly has an 'any' type.
+src/components/LaptopModel.tsx(122,37): error TS7006: Parameter 'child' implicitly has an 'any' type.

@@ -1,0 +1,25 @@
+---
+/**
+ * SectionHeader Component
+ * 
+ * Componente reutilizable para headers de sección con líneas decorativas.
+ * Renderiza un layout flex con línea izquierda, título en mayúsculas y línea derecha.
+ * 
+ * @example
+ * ```astro
+ * <SectionHeader title="Proyectos" />
+ * ```
+ */
+
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<div class="flex items-center justify-center mb-16">
+	<div class="h-px w-12 bg-gray-800 mr-4"></div>
+	<h2 class="text-xs uppercase tracking-widest text-gray-500">{title}</h2>
+	<div class="h-px w-12 bg-gray-800 ml-4"></div>
+</div>

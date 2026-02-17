@@ -1,0 +1,20 @@
+# TASK 2 COMPLETION EVIDENCE
+
+## Deliverable
+✓ File created: src/components/SectionHeader.astro
+
+## Verification
+✓ Interface Props defined with title: string
+✓ Props destructured: const { title } = Astro.props;
+✓ Structure matches Projects.astro pattern EXACTLY (lines 14-18):
+  - Flex container with items-center justify-center mb-16
+  - Left decorative line: h-px w-12 bg-gray-800 mr-4
+  - H2 with classes: text-xs uppercase tracking-widest text-gray-500
+  - Right decorative line: h-px w-12 bg-gray-800 ml-4
+✓ JSDoc comment added with usage example
+✓ pnpm astro check executed (output in task-2-astro-check.txt)
+✓ No errors introduced (pre-existing errors in LaptopModel.tsx unrelated)
+
+## Component Ready
+SectionHeader.astro is now available for import:
+import SectionHeader from '@/components/SectionHeader.astro';

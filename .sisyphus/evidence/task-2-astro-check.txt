@@ -1,0 +1,44 @@
+
+> iamkaleb21-github-io@0.0.1 astro /home/imkaleb21/dev/iamkaleb21.github.io
+> astro check
+
+02:53:56 [vite] Re-optimizing dependencies because vite config has changed
+02:53:56 [content] Syncing content
+02:53:56 [content] Synced content
+02:53:56 [types] Generated 103ms
+02:53:56 [check] Getting diagnostics for Astro files in /home/imkaleb21/dev/iamkaleb21.github.io...
+[96msrc/components/Experience.astro[0m:[93m2[0m:[93m1[0m - [93mwarning[0m[90m ts(6133): [0m'Icon' is declared but its value is never read.
+
+[7m2[0m import { Icon } from 'astro-icon/components';
+[7m [0m [93m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[96msrc/components/ExpertiseNodes.astro[0m:[93m19[0m:[93m21[0m - [93mwarning[0m[90m ts(6133): [0m'index' is declared but its value is never read.
+
+[7m19[0m   {nodes.map((node, index) => (
+[7m  [0m [93m                    ~~~~~[0m
+
+[96msrc/components/LaptopModel.tsx[0m:[93m122[0m:[93m37[0m - [91merror[0m[90m ts(7006): [0mParameter 'child' implicitly has an 'any' type.
+
+[7m122[0m         laptopRef.current.traverse((child) => {
+[7m   [0m [91m                                    ~~~~~[0m
+[96msrc/components/LaptopModel.tsx[0m:[93m112[0m:[93m35[0m - [91merror[0m[90m ts(7006): [0mParameter 'child' implicitly has an 'any' type.
+
+[7m112[0m       laptopRef.current.traverse((child) => {
+[7m   [0m [91m                                  ~~~~~[0m
+[96msrc/components/LaptopModel.tsx[0m:[93m6[0m:[93m24[0m - [91merror[0m[90m ts(7016): [0mCould not find a declaration file for module 'three'. '/home/imkaleb21/dev/iamkaleb21.github.io/node_modules/.pnpm/three@0.182.0/node_modules/three/build/three.module.js' implicitly has an 'any' type.
+  If the 'three' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/three'
+
+[7m6[0m import * as THREE from 'three';
+[7m [0m [91m                       ~~~~~~~[0m
+
+[96msrc/components/Nav.astro[0m:[93m3[0m:[93m1[0m - [93mwarning[0m[90m ts(6133): [0m'siteData' is declared but its value is never read.
+
+[7m3[0m import { siteData } from '../data/site';
+[7m [0m [93m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+Result (27 files): 
+- 3 errors
+- 0 warnings
+- 3 hints
+
+ ELIFECYCLE  Command failed with exit code 1.
