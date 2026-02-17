@@ -171,6 +171,19 @@ body {
 	transform: translateX(30%) rotate(0.001deg);
 }
 
+/* Móvil: sin backdrop-filter en iconos (36 blurs → lag); fondo tipo glass sin blur */
+@media (max-width: 768px) {
+	.tech-stack-icon {
+		-webkit-backdrop-filter: none;
+		backdrop-filter: none;
+		background: rgba(255, 255, 255, 0.1);
+	}
+	.browser-gecko .tech-stack-icon {
+		-webkit-backdrop-filter: none;
+		backdrop-filter: none;
+	}
+}
+
 /* Hide scrollbars (used for horizontal tech carousels) */
 .no-scrollbar::-webkit-scrollbar {
 	display: none;
