@@ -21,6 +21,28 @@ export const experiences: Experience[] = [
 		]
 	},
 	{
+		position: "Desarrollador de Software",
+		company: "IEP John Nash",
+		location: "Trujillo, Perú",
+		dates: "Julio 2024 – Enero 2026",
+		highlights: [
+			"Migración de flujos operativos manuales a un ecosistema web con Laravel, Vite y PostgreSQL.",
+			"Automatización del Sistema de Matrículas (+200 estudiantes), reduciendo el proceso de 5 días a horas.",
+			"Desarrollo del Sistema de Reclamos y arquitectura del CRM institucional."
+		]
+	},
+	{
+		position: "Practicante Preprofesional Backend & DevOps",
+		company: "Servicios Generales Neyo EIRL",
+		location: "Trujillo, Perú",
+		dates: "Julio 2024 – Diciembre 2024",
+		highlights: [
+			"Desarrollo de backend e-commerce seguro con Python (FastAPI) y autenticación JWT.",
+			"Contenerización de servicios con Docker para estandarizar entornos de desarrollo y producción.",
+			"Optimización de servidor para consultas rápidas en catálogo de autopartes."
+		]
+	},
+	{
 		position: "Desarrollador Full Stack Freelance",
 		company: "Proyectos independientes",
 		location: "Remoto",
