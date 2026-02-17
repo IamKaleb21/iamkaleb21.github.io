@@ -2,6 +2,7 @@ import type { ImageMetadata } from 'astro';
 import kaitoratImg from '../assets/projects/kaitorat.png';
 import equismathImg from '../assets/projects/equismath.png';
 import proyectaliaImg from '../assets/projects/proyectalia.png';
+import cronopusImg from '../assets/projects/cronopus.png';
 
 export interface Project {
     title: string;
@@ -14,6 +15,14 @@ export interface Project {
 }
 
 export const projects: Project[] = [
+    {
+        title: "CronOpus: Orquestador de Carrera con IA",
+        description: "Orquestador inteligente que utiliza LLMs para reescribir y optimizar currículums en LaTeX dinámicamente. Motor de inyección de contexto para adaptar perfiles en tiempo real.",
+        tagline: "Optimización de CVs con Inteligencia Artificial",
+        tags: ["Python", "Jinja2", "LaTeX", "LLMs"],
+        image: cronopusImg,
+        repoUrl: "https://github.com/IamKaleb21/CronOpus"
+    },
     {
         title: "Kaitorat: App de Productividad Personal",
         description: "Aplicación de productividad con estética inspirada en Persona 5 Royal. Timer Pomodoro con sincronización en tiempo real, configuración personalizable y autenticación con PocketBase.",
