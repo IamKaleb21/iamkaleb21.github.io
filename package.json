@@ -29,8 +29,10 @@
     "three": "^0.182.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.6",
     "@iconify-json/iconoir": "^1.2.10",
     "@iconify-json/mdi": "^1.2.3",
-    "@iconify-json/simple-icons": "^1.2.69"
+    "@iconify-json/simple-icons": "^1.2.69",
+    "typescript": "^5.9.3"
   }
 }

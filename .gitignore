@@ -31,3 +31,7 @@ references/
 .agent/
 .cursor/
 .vscode/
+.sisyphus/
+
+# AGENTS.md
+AGENTS.md
