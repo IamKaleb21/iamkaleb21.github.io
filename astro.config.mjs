@@ -11,6 +11,11 @@ import sitemap from '@astrojs/sitemap';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://iamkaleb21.github.io',
+  i18n: {
+    defaultLocale: 'es',
+    locales: ['es', 'en'],
+    prefixDefaultLocale: false
+  },
   vite: {
     plugins: [tailwindcss()]
   },
