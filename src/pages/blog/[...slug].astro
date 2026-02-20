@@ -24,31 +24,80 @@ const dateFormatted = new Intl.DateTimeFormat('es-ES', {
 	month: 'long',
 	day: 'numeric',
 }).format(entry.data.pubDate);
+
+const tagColors = [
+	'border-purple-400/60 bg-purple-500/15 text-purple-200',
+	'border-violet-400/60 bg-violet-500/15 text-violet-200',
+	'border-fuchsia-400/60 bg-fuchsia-500/15 text-fuchsia-200',
+	'border-purple-300/50 bg-purple-400/10 text-purple-300',
+	'border-violet-300/50 bg-violet-400/10 text-violet-300',
+];
+const tags = entry.data.tags ?? [];
 ---
 
 <BlogLayout title={entry.data.title} description={entry.data.description}>
-	<article class="prose prose-invert prose-headings:text-white prose-p:text-gray-300 prose-a:text-purple-400 max-w-none">
-		<header class="mb-8">
-			<h1 class="text-3xl font-bold text-white mb-2">{entry.data.title}</h1>
-			<time class="text-sm text-gray-400" datetime={entry.data.pubDate.toISOString()}>
-				{dateFormatted}
-			</time>
-			{entry.data.updatedDate && (
-				<span class="text-gray-500 text-sm ml-2">
-					(actualizado: {new Intl.DateTimeFormat('es-ES', { dateStyle: 'short' }).format(entry.data.updatedDate)})
-				</span>
+	<article>
+		<header class="text-center mb-10">
+			<div class="flex items-center justify-between mb-6">
+				<a
+					href="/blog/"
+					class="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-purple-300 transition-colors"
+				>
+					<svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+					</svg>
+					Volver al blog
+				</a>
+				<p class="text-sm text-purple-300/90">
+					<time datetime={entry.data.pubDate.toISOString()}>Publicado {dateFormatted}</time>
+					{entry.data.updatedDate && (
+						<span class="text-gray-500 ml-2">
+							· actualizado {new Intl.DateTimeFormat('es-ES', { dateStyle: 'short' }).format(entry.data.updatedDate)}
+						</span>
+					)}
+				</p>
+			</div>
+			<h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight mb-4">
+				{entry.data.title}
+			</h1>
+			<p class="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed mb-6">
+				{entry.data.description}
+			</p>
+			{tags.length > 0 && (
+				<ul class="flex flex-wrap justify-center gap-2" role="list" aria-label="Etiquetas">
+					{tags.map((tag, i) => (
+						<li>
+							<span
+								class={`inline-flex rounded-full border px-3 py-1 text-sm font-medium ${tagColors[i % tagColors.length]}`}
+							>
+								{tag}
+							</span>
+						</li>
+					))}
+				</ul>
 			)}
-			{entry.data.image && (
-				<div class="mt-4 rounded-xl overflow-hidden border border-white/10">
+		</header>
+
+		{(entry.data.image || entry.data.imageUrl) && (
+			<div class="rounded-2xl overflow-hidden border border-white/10 mb-12 shadow-xl">
+				{entry.data.image ? (
 					<Image
 						src={entry.data.image}
 						alt=""
-						class="w-full max-h-80 object-cover"
+						class="w-full aspect-[16/10] object-cover"
 						loading="eager"
 					/>
-				</div>
-			)}
-		</header>
+				) : (
+					<img
+						src={entry.data.imageUrl!}
+						alt=""
+						class="w-full aspect-[16/10] object-cover"
+						loading="eager"
+					/>
+				)}
+			</div>
+		)}
+
 		<div class="blog-content">
 			<Content />
 		</div>
