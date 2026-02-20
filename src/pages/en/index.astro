@@ -1,0 +1,77 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Hero from '../../components/Hero.astro';
+import ExpertiseNodes from '../../components/ExpertiseNodes.astro';
+import About from '../../components/About.astro';
+import TechStack from '../../components/TechStack.astro';
+import CentralViz from '../../components/CentralViz.astro';
+import Experience from '../../components/Experience.astro';
+import Studies from '../../components/Studies.astro';
+import Projects from '../../components/Projects.astro';
+import Contact from '../../components/Contact.astro';
+import Footer from '../../components/Footer.astro';
+import PortfolioAnimations from '../../components/PortfolioAnimations.astro';
+import { getData } from '../../data';
+
+const data = getData('en');
+---
+
+<Layout title={data.site.defaultTitle} description={data.site.defaultDescription}>
+	<!-- Navigation -->
+	<Nav />
+
+	<!-- Main Container -->
+	<main id="main" class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 mt-10">
+		<Hero 
+			name={data.site.name}
+			subtitle={data.site.subtitle}
+			tagline={data.site.tagline}
+			socialLinks={data.site.socialLinks}
+		/>
+
+		<ExpertiseNodes />
+
+		<div id="about">
+			<About content={data.about.content} sectionTitle={data.ui.nav.about} />
+		</div>
+
+		<div id="experience">
+			<Experience experiences={data.experience} sectionTitle={data.ui.nav.experience} />
+		</div>
+
+		<div id="projects">
+			<Projects projects={data.projects} sectionTitle={data.ui.nav.projects} />
+		</div>
+
+		<div id="tech-stack">
+			<TechStack techCategories={data.techstack} sectionTitle={data.ui.nav.techStack} />
+		</div>
+
+		<CentralViz role={data.site.role} learning={data.site.learning} />
+
+		<div id="studies">
+			<Studies studies={data.studies} sectionTitle={data.ui.nav.studies} />
+		</div>
+
+		<div id="contact">
+			<Contact 
+				heading={data.contact.heading}
+				subheading1={data.contact.subheading1}
+				subheading2={data.contact.subheading2}
+				email={data.contact.email}
+				sectionTitle={data.ui.nav.contact}
+			/>
+		</div>
+
+		<Footer 
+			githubUrl={data.site.githubUrl}
+			linkedinUrl={data.site.socialLinks.linkedin}
+			email={data.site.socialLinks.email}
+			location={data.site.location}
+		/>
+	</main>
+
+	<!-- GSAP Animations -->
+	<PortfolioAnimations />
+</Layout>
