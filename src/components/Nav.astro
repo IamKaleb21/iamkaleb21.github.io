@@ -5,9 +5,13 @@ import type { UiData } from '../data/types';
 interface Props {
 	locale: 'es' | 'en';
 	ui: UiData;
+	/** Cuando está definido (ej. en blog), los links del nav llevan a la main page del portfolio con hash */
+	linkBase?: string;
+	/** true cuando la página actual es el blog (para resaltar el botón Blog) */
+	isBlogPage?: boolean;
 }
 
-const { locale, ui } = Astro.props;
+const { locale, ui, linkBase, isBlogPage } = Astro.props;
 
 const navLinks = [
 	{ href: "#about", label: ui.nav.about },
@@ -17,18 +21,21 @@ const navLinks = [
 	{ href: "#studies", label: ui.nav.studies },
 	{ href: "#contact", label: ui.nav.contact }
 ];
+
+const homeHref = linkBase ?? '#';
+const sectionHref = (hash: string) => (linkBase ? `${linkBase}${hash}` : hash);
 ---
 
 <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-black/40 border-b border-white/5 transition-all nav-bar" aria-label="Navegación principal">
 	<div class="flex justify-between items-center px-6 sm:px-8 py-4 max-w-7xl mx-auto">
-		<a href="#" class="text-white text-2xl font-bold opacity-80 hover:opacity-100 transition-opacity nav-fade" aria-label="Home">
+		<a href={homeHref} class="text-white text-2xl font-bold opacity-80 hover:opacity-100 transition-opacity nav-fade" aria-label="Home">
 			<Icon name="mdi:code" class="w-8 h-8" />
 		</a>
 
 		<!-- Mobile: single changing tag (scrollspy-driven) -->
 		<div class="md:hidden flex-1 flex justify-center px-4">
 			<a
-				href={navLinks[0].href}
+				href={sectionHref(navLinks[0].href)}
 				class="nav-current-tag px-4 py-2 rounded-full text-sm text-white/90 border border-white/10 bg-white/5 backdrop-blur-md"
 				data-nav-current
 				aria-label="Current section"
@@ -40,7 +47,7 @@ const navLinks = [
 		<div class="hidden md:flex items-center gap-1 nav-links-container">
 			{navLinks.map((link) => (
 				<a 
-					href={link.href}
+					href={sectionHref(link.href)}
 					class="nav-link px-3 py-2 rounded-lg text-sm text-gray-400 hover:text-white transition-all duration-300"
 					data-nav-link={link.href.replace('#', '')}
 				>
@@ -52,8 +59,14 @@ const navLinks = [
 		<div class="flex items-center gap-2 nav-fade">
 			<a
 				href="/blog/"
-				class="glass-btn px-6 py-2 rounded-full text-sm text-white font-medium flex items-center gap-2 hover:opacity-90 transition-opacity"
+				class:list={[
+					'px-6 py-2 rounded-full text-sm font-medium flex items-center gap-2 transition-all',
+					isBlogPage
+						? 'bg-purple-500/25 text-purple-200 border border-purple-400/40 hover:bg-purple-500/35'
+						: 'glass-btn text-white hover:opacity-90'
+				]}
 				aria-label="Ir al blog"
+				aria-current={isBlogPage ? 'page' : undefined}
 			>
 				<Icon name="mdi:notebook-outline" class="w-4 h-4" />
 				Blog
