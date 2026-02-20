@@ -1,0 +1,87 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+	entry: CollectionEntry<'blog'>;
+	authorName?: string;
+}
+
+const { entry, authorName } = Astro.props;
+const href = `/blog/${entry.id}/`;
+const dateFormatted = new Intl.DateTimeFormat('es-ES', {
+	day: 'numeric',
+	month: 'short',
+	year: 'numeric',
+}).format(entry.data.pubDate);
+const tags = entry.data.tags ?? [];
+---
+
+<article class="featured-blog-card group rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:border-white/15 transition-colors">
+	<a href={href} class="block relative aspect-[21/9] min-h-[260px] sm:aspect-[3/1]">
+		{entry.data.image ? (
+			<Image
+				src={entry.data.image}
+				alt=""
+				class="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out"
+				loading="eager"
+			/>
+		) : entry.data.imageUrl ? (
+			<img
+				src={entry.data.imageUrl}
+				alt=""
+				class="absolute inset-0 w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-500 ease-out"
+				loading="eager"
+			/>
+		) : (
+			<div class="absolute inset-0 bg-gradient-to-br from-white/10 to-purple-900/20 flex items-center justify-center">
+				<Icon name="mdi:notebook-outline" class="w-20 h-20 text-white/20" />
+			</div>
+		)}
+		<!-- Overlay suave solo en la parte inferior -->
+		<div
+			class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-transparent"
+			aria-hidden="true"
+		/>
+		<div class="absolute inset-0 flex flex-col justify-end p-6 sm:p-8 lg:p-10">
+			<div class="flex justify-end mb-2">
+				<span
+					class="inline-flex items-center justify-center w-9 h-9 rounded-full bg-white/10 text-white/90 border border-white/15 group-hover:bg-white/20 transition-colors"
+					aria-hidden="true"
+				>
+					<Icon name="mdi:arrow-top-right" class="w-4 h-4" />
+				</span>
+			</div>
+			<h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-2 line-clamp-2 tracking-tight">
+				{entry.data.title}
+			</h2>
+			<p class="text-gray-300 text-sm sm:text-base mb-4 line-clamp-2 max-w-2xl">
+				{entry.data.description}
+			</p>
+			<div class="flex flex-wrap items-end justify-between gap-3">
+				<div class="flex items-center gap-2 text-sm text-gray-400">
+					<span class="flex items-center gap-1.5">
+						<Icon name="mdi:account-outline" class="w-4 h-4 text-gray-500" />
+						{authorName ?? 'Autor'}
+					</span>
+					<span class="flex items-center gap-1.5" aria-hidden="true">
+						<Icon name="mdi:calendar-outline" class="w-4 h-4 text-gray-500" />
+						<time datetime={entry.data.pubDate.toISOString()}>{dateFormatted}</time>
+					</span>
+				</div>
+				{tags.length > 0 && (
+					<div class="flex flex-wrap gap-2">
+						{tags.slice(0, 3).map((tag) => (
+							<span
+								class="px-2.5 py-1 rounded-md text-xs font-medium text-gray-300 border border-white/10 bg-white/5"
+							>
+								{tag}
+							</span>
+						))}
+					</div>
+				)}
+			</div>
+		</div>
+	</a>
+</article>
