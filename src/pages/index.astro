@@ -12,53 +12,63 @@ import Projects from '../components/Projects.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
 import PortfolioAnimations from '../components/PortfolioAnimations.astro';
-import { siteData } from '../data/site';
+import { getData } from '../data';
+
+const data = getData('es');
 ---
 
-<Layout title="Portafolio de Aarón Kaleb Arteaga Rodríguez" description={siteData.tagline}>
+<Layout title={data.site.defaultTitle} description={data.site.defaultDescription}>
 	<!-- Navigation -->
-	<Nav githubUrl={siteData.githubUrl} />
+	<Nav />
 
 	<!-- Main Container -->
 	<main id="main" class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 mt-10">
 		<Hero 
-			name={siteData.name}
-			tagline={siteData.tagline}
-			socialLinks={siteData.socialLinks}
+			name={data.site.name}
+			subtitle={data.site.subtitle}
+			tagline={data.site.tagline}
+			socialLinks={data.site.socialLinks}
 		/>
 
 		<ExpertiseNodes />
 
 		<div id="about">
-			<About />
+			<About content={data.about.content} sectionTitle={data.ui.nav.about} />
 		</div>
 
 		<div id="experience">
-			<Experience />
+			<Experience experiences={data.experience} sectionTitle={data.ui.nav.experience} />
 		</div>
 
 		<div id="projects">
-			<Projects />
+			<Projects projects={data.projects} sectionTitle={data.ui.nav.projects} />
 		</div>
 
 		<div id="tech-stack">
-			<TechStack />
+			<TechStack techCategories={data.techstack} sectionTitle={data.ui.nav.techStack} />
 		</div>
 
-		<CentralViz role={siteData.role} learning={siteData.learning} />
+		<CentralViz role={data.site.role} learning={data.site.learning} />
 
 		<div id="studies">
-			<Studies />
+			<Studies studies={data.studies} sectionTitle={data.ui.nav.studies} />
 		</div>
 
 		<div id="contact">
-			<Contact email={typeof siteData.socialLinks.email === 'string' ? siteData.socialLinks.email.replace('mailto:', '') : 'hello@example.com'} />
+			<Contact 
+				heading={data.contact.heading}
+				subheading1={data.contact.subheading1}
+				subheading2={data.contact.subheading2}
+				email={data.contact.email}
+				sectionTitle={data.ui.nav.contact}
+			/>
 		</div>
 
 		<Footer 
-			githubUrl={siteData.githubUrl}
-			linkedinUrl={siteData.socialLinks.linkedin}
-			email={siteData.socialLinks.email}
+			githubUrl={data.site.githubUrl}
+			linkedinUrl={data.site.socialLinks.linkedin}
+			email={data.site.socialLinks.email}
+			location={data.site.location}
 		/>
 	</main>
 

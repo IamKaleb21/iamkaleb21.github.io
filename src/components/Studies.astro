@@ -1,10 +1,17 @@
 ---
-import { studies } from '../data/studies';
+import type { Study } from '../data/types';
 import SectionHeader from './SectionHeader.astro';
+
+interface Props {
+	studies: Study[];
+	sectionTitle: string;
+}
+
+const { studies, sectionTitle } = Astro.props;
 ---
 
 <section class="mb-32" data-animate="section">
-	<SectionHeader title="Estudios" />
+	<SectionHeader title={sectionTitle} />
 
 	<div class="max-w-4xl mx-auto space-y-6">
 		{studies.map((study) => (

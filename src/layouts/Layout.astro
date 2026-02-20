@@ -1,16 +1,12 @@
 ---
 import '../styles/global.css';
-import { siteData } from '../data/site';
 
 interface Props {
-	title?: string;
-	description?: string;
+	title: string;
+	description: string;
 }
 
-const { 
-	title = siteData.defaultTitle, 
-	description = siteData.defaultDescription 
-} = Astro.props;
+const { title, description } = Astro.props;
 
 const siteUrl = import.meta.env.SITE ?? 'https://iamkaleb21.github.io';
 const canonicalUrl = `${siteUrl.replace(/\/$/, '')}/`;

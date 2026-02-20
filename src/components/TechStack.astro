@@ -1,11 +1,18 @@
 ---
 import { Icon } from 'astro-icon/components';
-import { techCategories } from '../data/techstack';
+import type { TechCategory } from '../data/types';
 import SectionHeader from './SectionHeader.astro';
+
+interface Props {
+	techCategories: TechCategory[];
+	sectionTitle: string;
+}
+
+const { techCategories, sectionTitle } = Astro.props;
 ---
 
 <section class="mb-32">
-	<SectionHeader title="Tecnologías" />
+	<SectionHeader title={sectionTitle} />
 
 	<div class="space-y-12 max-w-4xl mx-auto" data-tech-grid>
 		{techCategories.map((category) => (

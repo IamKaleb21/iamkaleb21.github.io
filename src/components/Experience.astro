@@ -1,12 +1,19 @@
 ---
-import { experiences } from '../data/experience';
+import type { Experience } from '../data/types';
 import ExperienceCard from './ExperienceCard.astro';
 import SectionHeader from './SectionHeader.astro';
 import TimelineItem from './TimelineItem.astro';
+
+interface Props {
+	experiences: Experience[];
+	sectionTitle: string;
+}
+
+const { experiences, sectionTitle } = Astro.props;
 ---
 
 <section class="mb-32">
-	<SectionHeader title="Experiencia" />
+	<SectionHeader title={sectionTitle} />
 
 	<!-- Timeline desktop: línea vertical centrada + ítems alternados -->
 	<div class="relative max-w-4xl mx-auto hidden md:block">
