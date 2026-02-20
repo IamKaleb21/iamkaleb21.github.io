@@ -268,3 +268,161 @@ body {
 .minimal-input:focus {
 	border-bottom-color: #8b5cf6;
 }
+
+/* Blog / MDX content (listas, código, encabezados) */
+.blog-content ul {
+	list-style-type: disc;
+	padding-left: 1.5rem;
+	margin: 0.75rem 0;
+}
+
+.blog-content ol {
+	list-style-type: decimal;
+	padding-left: 1.5rem;
+	margin: 0.75rem 0;
+}
+
+.blog-content li {
+	margin: 0.25rem 0;
+	color: rgb(203 213 225); /* gray-300 */
+}
+
+.blog-content li::marker {
+	color: rgba(139, 92, 246, 0.8);
+}
+
+.blog-content h2 {
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: white;
+	margin-top: 1.5rem;
+	margin-bottom: 0.5rem;
+}
+
+.blog-content h3 {
+	font-size: 1.25rem;
+	font-weight: 600;
+	color: rgb(226 232 240);
+	margin-top: 1.25rem;
+	margin-bottom: 0.5rem;
+}
+
+.blog-content p {
+	margin: 0.5rem 0;
+	color: rgb(203 213 225);
+	line-height: 1.65;
+}
+
+.blog-content code {
+	background: rgba(255, 255, 255, 0.08);
+	color: rgb(226 232 240);
+	padding: 0.15rem 0.4rem;
+	border-radius: 0.25rem;
+	font-size: 0.9em;
+	font-family: var(--font-family-mono);
+}
+
+.blog-content pre {
+	background: rgba(15, 23, 42, 0.9);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 0.5rem;
+	padding: 1rem;
+	overflow-x: auto;
+	margin: 1rem 0;
+}
+
+.blog-content pre code {
+	background: none;
+	padding: 0;
+}
+
+.blog-content a {
+	color: rgb(192 132 252);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+.blog-content a:hover {
+	color: rgb(216 180 252);
+}
+
+.blog-content strong {
+	font-weight: 600;
+	color: rgb(226 232 240);
+}
+
+.blog-content em {
+	font-style: italic;
+	color: rgb(203 213 225);
+}
+
+.blog-content h4 {
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: rgb(226 232 240);
+	margin-top: 1rem;
+	margin-bottom: 0.25rem;
+}
+
+.blog-content blockquote {
+	border-left: 4px solid rgba(139, 92, 246, 0.6);
+	padding-left: 1rem;
+	margin: 1rem 0;
+	color: rgb(203 213 225);
+	font-style: italic;
+	background: rgba(255, 255, 255, 0.03);
+	border-radius: 0 0.25rem 0.25rem 0;
+	padding: 0.75rem 1rem;
+}
+
+.blog-content hr {
+	border: none;
+	height: 1px;
+	background: rgba(255, 255, 255, 0.1);
+	margin: 1.5rem 0;
+}
+
+.blog-content table {
+	width: 100%;
+	border-collapse: collapse;
+	margin: 1rem 0;
+	font-size: 0.9rem;
+}
+
+.blog-content th,
+.blog-content td {
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	padding: 0.5rem 0.75rem;
+	text-align: left;
+	color: rgb(203 213 225);
+}
+
+.blog-content th {
+	background: rgba(255, 255, 255, 0.06);
+	color: rgb(226 232 240);
+	font-weight: 600;
+}
+
+/* GFM: tachado */
+.blog-content del,
+.blog-content s {
+	text-decoration: line-through;
+	color: rgb(148 163 184);
+}
+
+/* GFM: listas de tareas (task list) */
+.blog-content input[type="checkbox"] {
+	accent-color: rgb(139 92 246);
+	margin-right: 0.5rem;
+	vertical-align: middle;
+}
+
+.blog-content .task-list-item {
+	list-style: none;
+	padding-left: 0;
+	margin-left: 0;
+}
+
+.blog-content .task-list-item::marker {
+	display: none;
+}
