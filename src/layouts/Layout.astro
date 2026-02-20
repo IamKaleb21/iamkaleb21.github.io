@@ -67,5 +67,24 @@ const ogLocale = locale === 'en' ? 'en_US' : 'es_ES';
 				}
 			})();
 		</script>
+		<script is:inline>
+			// i18n: redirect / to /en/ when preferredLocale is en; remember choice on locale link click
+			(function () {
+				try {
+					var p = window.location.pathname;
+					if ((p === '/' || p === '') && localStorage.getItem('preferredLocale') === 'en') {
+						window.location.replace('/en/');
+						return;
+					}
+					document.addEventListener('click', function (e) {
+						var a = e.target.closest('[data-locale-link]');
+						if (!a) return;
+						var h = a.getAttribute('href');
+						if (h === '/en/') localStorage.setItem('preferredLocale', 'en');
+						else if (h === '/') localStorage.setItem('preferredLocale', 'es');
+					});
+				} catch (err) {}
+			})();
+		</script>
 	</body>
 </html>
