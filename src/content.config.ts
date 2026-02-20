@@ -11,6 +11,9 @@ const blog = defineCollection({
 			pubDate: z.coerce.date(),
 			updatedDate: z.coerce.date().optional(),
 			image: image().optional(),
+			/** URL de imagen externa (internet). Si existe, se usa en lugar de image local. */
+			imageUrl: z.string().url().optional(),
+			tags: z.array(z.string()).optional(),
 			draft: z.boolean().optional().default(false),
 		}),
 });
