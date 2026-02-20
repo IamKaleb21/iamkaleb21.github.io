@@ -19,7 +19,7 @@ const data = getData('es');
 
 <Layout title={data.site.defaultTitle} description={data.site.defaultDescription} locale="es" skipLink={data.ui.skipLink}>
 	<!-- Navigation -->
-	<Nav />
+	<Nav locale="es" ui={data.ui} />
 
 	<!-- Main Container -->
 	<main id="main" class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 mt-10">

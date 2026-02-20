@@ -1,13 +1,21 @@
 ---
 import { Icon } from 'astro-icon/components';
+import type { UiData } from '../data/types';
+
+interface Props {
+	locale: 'es' | 'en';
+	ui: UiData;
+}
+
+const { locale, ui } = Astro.props;
 
 const navLinks = [
-	{ href: "#about", label: "Sobre mí" },
-	{ href: "#experience", label: "Experiencia" },
-	{ href: "#projects", label: "Proyectos" },
-	{ href: "#tech-stack", label: "Tecnologías" },
-	{ href: "#studies", label: "Formación" },
-	{ href: "#contact", label: "Contacto" }
+	{ href: "#about", label: ui.nav.about },
+	{ href: "#experience", label: ui.nav.experience },
+	{ href: "#projects", label: ui.nav.projects },
+	{ href: "#tech-stack", label: ui.nav.techStack },
+	{ href: "#studies", label: ui.nav.studies },
+	{ href: "#contact", label: ui.nav.contact }
 ];
 ---
 
@@ -39,6 +47,20 @@ const navLinks = [
 					{link.label}
 				</a>
 			))}
+		</div>
+
+		<div class="flex items-center gap-2 nav-fade" aria-label="Seleccionar idioma">
+			{locale === 'es' ? (
+				<>
+					<span class="px-3 py-1.5 rounded-lg text-sm font-medium text-white bg-white/10 border border-white/20" aria-current="true">ES</span>
+					<a href="/en/" class="px-3 py-1.5 rounded-lg text-sm text-gray-400 hover:text-white transition-colors border border-transparent hover:border-white/10" data-locale-link>EN</a>
+				</>
+			) : (
+				<>
+					<a href="/" class="px-3 py-1.5 rounded-lg text-sm text-gray-400 hover:text-white transition-colors border border-transparent hover:border-white/10" data-locale-link>ES</a>
+					<span class="px-3 py-1.5 rounded-lg text-sm font-medium text-white bg-white/10 border border-white/20" aria-current="true">EN</span>
+				</>
+			)}
 		</div>
 
 		<button 
