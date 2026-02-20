@@ -60,8 +60,8 @@ const ogImage = `${siteUrl}/favicon.svg`;
 		<a href="#main" class="skip-link">
 			{data.ui.skipLink}
 		</a>
-		<Nav locale="es" ui={data.ui} />
-		<main id="main" class="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+		<Nav locale="es" ui={data.ui} linkBase="/" isBlogPage />
+		<main id="main" class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
 			<slot />
 		</main>
 		<Footer
