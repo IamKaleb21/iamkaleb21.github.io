@@ -17,7 +17,7 @@ import { getData } from '../data';
 const data = getData('es');
 ---
 
-<Layout title={data.site.defaultTitle} description={data.site.defaultDescription}>
+<Layout title={data.site.defaultTitle} description={data.site.defaultDescription} locale="es" skipLink={data.ui.skipLink}>
 	<!-- Navigation -->
 	<Nav />
 

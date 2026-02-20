@@ -4,19 +4,26 @@ import '../styles/global.css';
 interface Props {
 	title: string;
 	description: string;
+	locale: 'es' | 'en';
+	skipLink: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, locale, skipLink } = Astro.props;
 
-const siteUrl = import.meta.env.SITE ?? 'https://iamkaleb21.github.io';
-const canonicalUrl = `${siteUrl.replace(/\/$/, '')}/`;
+const siteUrl = (import.meta.env.SITE ?? 'https://iamkaleb21.github.io').replace(/\/$/, '');
+const canonicalUrl = locale === 'en' ? `${siteUrl}/en/` : `${siteUrl}/`;
 const ogImage = `${canonicalUrl}favicon.svg`;
+const ogLocale = locale === 'en' ? 'en_US' : 'es_ES';
 ---
 
 <!doctype html>
-<html lang="es" id="html-root">
+<html lang={locale} id="html-root">
 	<head>
 		<meta charset="UTF-8" />
+		<link rel="canonical" href={canonicalUrl} />
+		<link rel="alternate" hreflang="es" href={`${siteUrl}/`} />
+		<link rel="alternate" hreflang="en" href={`${siteUrl}/en/`} />
+		<link rel="alternate" hreflang="x-default" href={`${siteUrl}/`} />
 		<link rel="sitemap" href="/sitemap-index.xml" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<meta name="description" content={description} />
@@ -29,7 +36,7 @@ const ogImage = `${canonicalUrl}favicon.svg`;
 		<meta property="og:description" content={description} />
 		<meta property="og:url" content={canonicalUrl} />
 		<meta property="og:type" content="website" />
-		<meta property="og:locale" content="es_ES" />
+		<meta property="og:locale" content={ogLocale} />
 		<meta property="og:image" content={ogImage} />
 
 		<!-- Twitter Card -->
@@ -48,7 +55,7 @@ const ogImage = `${canonicalUrl}favicon.svg`;
 	</head>
 	<body>
 		<a href="#main" class="skip-link">
-			Saltar al contenido principal
+			{skipLink}
 		</a>
 		<slot />
 		<script is:inline>
